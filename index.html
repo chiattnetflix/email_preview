@@ -38,11 +38,14 @@
                 currSelected.classList.remove("selected")
               );
             v.classList.add("selected");
-            window.parent.postMessage({
-              type: "click",
-              data: v.dataset.moduleId,
-              id,
-            });
+            window.parent.postMessage(
+              {
+                type: "click",
+                data: v.dataset.moduleId,
+                id,
+              },
+              "*"
+            );
           });
         });
       }
@@ -52,10 +55,13 @@
           const clean = DOMPurify.sanitize(data.data);
           document.getElementById("root").innerHTML = clean;
           setTimeout(() => addListeners(data.id), 200);
-          window.parent.postMessage({
-            type: "ack",
-            id: data.id,
-          });
+          window.parent.postMessage(
+            {
+              type: "ack",
+              id: data.id,
+            },
+            "*"
+          );
         }
       });
     </script>

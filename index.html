@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"
+    ></script>
+    <title>Email Rendering Page</title>
+    <style>
+      .module-class:hover {
+        outline: 2px solid #4466df;
+      }
+      .module-class > * {
+        pointer-events: none;
+      }
+      .selected {
+        outline: 2px solid #4466df;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="text/javascript">
+      function addListeners(id) {
+        // identify elements with data-moduleId
+        const elements = document.querySelectorAll("[data-module-id]");
+
+        elements.forEach((v) => {
+          // add the correct styles
+          v.classList.add("module-class");
+          // add the onclick listeners
+
+          v.addEventListener("click", () => {
+            document
+              .querySelectorAll(".selected")
+              .forEach((currSelected) =>
+                currSelected.classList.remove("selected")
+              );
+            v.classList.add("selected");
+            window.parent.postMessage({
+              type: "click",
+              data: v.dataset.moduleId,
+              id,
+            });
+          });
+        });
+      }
+      window.addEventListener("message", (event) => {
+        const { data } = event;
+        if (data.type === "html") {
+          const clean = DOMPurify.sanitize(data.data);
+          document.getElementById("root").innerHTML = clean;
+          setTimeout(() => addListeners(data.id), 200);
+        }
+      });
+    </script>
+    <div id="root"></div>
+  </body>
+</html>

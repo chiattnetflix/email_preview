@@ -54,6 +54,7 @@
           setTimeout(() => addListeners(data.id), 200);
           window.parent.postMessage({
             type: "ack",
+            id: data.id,
           });
         }
       });

@@ -52,6 +52,9 @@
           const clean = DOMPurify.sanitize(data.data);
           document.getElementById("root").innerHTML = clean;
           setTimeout(() => addListeners(data.id), 200);
+          window.parent.postMessage({
+            type: "ack",
+          });
         }
       });
     </script>
